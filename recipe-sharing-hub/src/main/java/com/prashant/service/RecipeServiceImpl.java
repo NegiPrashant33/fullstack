@@ -36,7 +36,7 @@ public class RecipeServiceImpl implements RecipeService {
         if(opt.isPresent())
             return opt.get();
 
-        throw  new Exception("Recipe with not found with id " + id);
+        throw  new Exception("Recipe not found with id " + id);
     }
 
     @Override
@@ -47,16 +47,31 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe updateRecipe(Recipe recipe, Long id) throws Exception {
-        return null;
+        Recipe oldRecipe = findRecipeById(id);
+
+        if(recipe.getTitle() != null)
+            oldRecipe.setTitle(recipe.getTitle());
+        if(recipe.getDescription() != null)
+            oldRecipe.setDescription(recipe.getDescription());
+        if(recipe.getImage() != null)
+            oldRecipe.setImage(recipe.getImage());
+
+        return recipeRepository.save(oldRecipe);
     }
 
     @Override
     public List<Recipe> findAllRecipe() {
-        return null;
+        return recipeRepository.findAll();
     }
 
     @Override
     public Recipe likeRecipe(Long recipeId, User user) throws Exception {
-        return null;
+        Recipe recipe = findRecipeById(recipeId);
+        if(recipe.getLikes().contains(user.getId()))
+            recipe.getLikes().remove(user.getId());
+        else
+            recipe.getLikes().add(user.getId());
+
+        return recipeRepository.save(recipe);
     }
 }
