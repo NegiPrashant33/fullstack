@@ -27,7 +27,8 @@ public class Recipe {
 
     private String description;
 
-    private boolean vegitarian;
+    @Column(name = "vegetarian")
+    private boolean vegetarian;
 
     private LocalDateTime createdAt;
 
